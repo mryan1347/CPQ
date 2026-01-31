@@ -28,17 +28,17 @@ export class ApprovalService {
       let matches = false;
 
       // Check discount threshold
-      if (rule.min_discount_percent !== null && rule.max_discount_percent !== null) {
+      if (rule.min_discount_percent != null && rule.max_discount_percent != null) {
         if (maxDiscountPercent >= rule.min_discount_percent && maxDiscountPercent <= rule.max_discount_percent) {
           matches = true;
         }
-      } else if (rule.min_discount_percent !== null && maxDiscountPercent >= rule.min_discount_percent) {
+      } else if (rule.min_discount_percent != null && maxDiscountPercent >= rule.min_discount_percent) {
         matches = true;
       }
 
       // Check total threshold
-      if (rule.min_total !== null) {
-        if (quote.total >= rule.min_total && (rule.max_total === null || quote.total <= rule.max_total)) {
+      if (rule.min_total != null) {
+        if (quote.total >= rule.min_total && (rule.max_total == null || quote.total <= rule.max_total)) {
           matches = true;
         }
       }

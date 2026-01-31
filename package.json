@@ -1,6 +1,7 @@
 {
   "name": "cpq-hubspot",
   "version": "1.0.0",
+  "type": "module",
   "description": "Configure, Price, Quote application with HubSpot CRM integration",
   "main": "dist/index.js",
   "scripts": {

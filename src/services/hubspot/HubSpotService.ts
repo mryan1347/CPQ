@@ -171,7 +171,7 @@ export class HubSpotService {
         return customer.hubspot_company_id;
       } else {
         // Create new
-        const response = await this.client.crm.companies.basicApi.create({ properties });
+        const response = await this.client.crm.companies.basicApi.create({ properties, associations: [] });
 
         // Update local record with HubSpot ID
         db.prepare('UPDATE customers SET hubspot_company_id = ? WHERE id = ?').run(
@@ -228,7 +228,7 @@ export class HubSpotService {
             filters: [
               {
                 propertyName: 'email',
-                operator: 'EQ',
+                operator: 'EQ' as any,
                 value: email,
               },
             ],
@@ -236,6 +236,8 @@ export class HubSpotService {
         ],
         properties: ['firstname', 'lastname', 'email', 'phone', 'company'],
         limit: 1,
+        after: '0',
+        sorts: [],
       });
 
       if (response.results.length > 0) {
@@ -276,7 +278,7 @@ export class HubSpotService {
         properties.closedate = new Date(quote.valid_until).toISOString();
       }
 
-      const response = await this.client.crm.deals.basicApi.create({ properties });
+      const response = await this.client.crm.deals.basicApi.create({ properties, associations: [] });
 
       // Update quote with HubSpot deal ID
       db.prepare('UPDATE quotes SET hubspot_deal_id = ? WHERE id = ?').run(response.id, quote.id);
@@ -351,12 +353,14 @@ export class HubSpotService {
    */
   private async associateDealWithCompany(dealId: string, companyId: string): Promise<void> {
     try {
-      await this.client.crm.deals.associationsApi.create(dealId, 'companies', companyId, [
-        {
-          associationCategory: 'HUBSPOT_DEFINED',
-          associationTypeId: 5, // Deal to Company
-        },
-      ]);
+      // Use the associations API to link deal to company
+      await this.client.crm.associations.v4.basicApi.create(
+        'deals',
+        dealId,
+        'companies',
+        companyId,
+        [{ associationCategory: 'HUBSPOT_DEFINED' as any, associationTypeId: 5 }]
+      );
     } catch (error) {
       console.error('Failed to associate deal with company:', error);
     }

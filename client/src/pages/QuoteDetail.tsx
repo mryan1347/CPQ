@@ -50,7 +50,7 @@ interface QuoteDetail {
 export default function QuoteDetail() {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
-  const { user } = useAuth();
+  useAuth(); // Ensure user is authenticated
   const [quote, setQuote] = useState<QuoteDetail | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [actionLoading, setActionLoading] = useState('');
@@ -161,7 +161,6 @@ export default function QuoteDetail() {
     );
   }
 
-  const canEdit = quote.status === 'draft';
   const canFinalize = quote.status === 'draft' && !quote.requires_approval;
   const canSubmitApproval = quote.status === 'draft' && quote.requires_approval;
   const canSend = quote.status === 'approved';
