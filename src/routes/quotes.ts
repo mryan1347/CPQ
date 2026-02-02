@@ -1,6 +1,6 @@
 import { Router, Request, Response } from 'express';
 import db from '../db/database.js';
-import { authenticate, requireRole } from '../middleware/auth.js';
+import { authenticate } from '../middleware/auth.js';
 import { quoteService } from '../services/quote/QuoteService.js';
 import { pricingEngine } from '../services/pricing/PricingEngine.js';
 import { approvalService } from '../services/approval/ApprovalService.js';
@@ -296,7 +296,7 @@ router.get('/:id/pdf', authenticate, async (req: Request, res: Response) => {
     res.setHeader('Content-Type', 'application/pdf');
     res.setHeader('Content-Disposition', `attachment; filename="quote-${quote.quote_number}.pdf"`);
     res.send(pdfBuffer);
-  } catch (error: any) {
+  } catch {
     res.status(500).json({ success: false, error: 'Failed to generate PDF' });
   }
 });

@@ -108,10 +108,11 @@ export default function QuoteDetail() {
         case 'reject':
           await api.post(`/quotes/${id}/reject`);
           break;
-        case 'clone':
+        case 'clone': {
           const response = await api.post(`/quotes/${id}/clone`);
           navigate(`/quotes/${response.data.data.id}`);
           return;
+        }
         case 'sync-hubspot':
           await api.post(`/quotes/${id}/sync-to-hubspot`);
           break;

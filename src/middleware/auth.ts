@@ -6,6 +6,7 @@ import type { User, UserPayload } from '../types/index.js';
 
 // Extend Express Request to include user
 declare global {
+  // eslint-disable-next-line @typescript-eslint/no-namespace
   namespace Express {
     interface Request {
       user?: UserPayload;
@@ -45,7 +46,7 @@ export function authenticate(req: Request, res: Response, next: NextFunction): v
     };
 
     next();
-  } catch (error) {
+  } catch {
     res.status(401).json({ success: false, error: 'Invalid token' });
   }
 }
