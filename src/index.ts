@@ -51,11 +51,12 @@ if (config.nodeEnv === 'production') {
 }
 
 // Error handling middleware
-app.use((err: any, req: express.Request, res: express.Response, next: express.NextFunction) => {
+app.use((err: unknown, req: express.Request, res: express.Response, _next: express.NextFunction) => {
   console.error('Error:', err);
+  const message = err instanceof Error ? err.message : 'Unknown error';
   res.status(500).json({
     success: false,
-    error: config.nodeEnv === 'development' ? err.message : 'Internal server error',
+    error: config.nodeEnv === 'development' ? message : 'Internal server error',
   });
 });
 
